@@ -1,0 +1,14 @@
+<mat-toolbar color="primary" class="header mat-elevation-z6">
+  <div class="menu-button">
+    <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div class="website-title">
+    <h1>DOI Prototype</h1>
+  </div>
+  <div class="login-button">
+    <button mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+    <button mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+  </div>
+</mat-toolbar>
