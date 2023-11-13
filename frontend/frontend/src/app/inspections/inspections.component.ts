@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { InspectionsService } from './inspections.service';
-interface Inspection {
+export interface inspectionData {
   inspectorId: number;
   fireChecklist: [] | null;
   structuralChecklist: [] | null;
@@ -13,7 +14,7 @@ interface Inspection {
   dateTime: string;
 }
 
-interface tableData {
+export interface tableData {
   inspectorName: string;
   dateTime: string;
   home: string;
@@ -25,15 +26,19 @@ interface tableData {
 @Component({
   selector: 'app-inspections',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule],
   templateUrl: './inspections.component.html',
   styleUrl: './inspections.component.css',
 })
 export class InspectionsComponent {
-  inspectionData: Inspection[];
-  dataSource: tableData[];
+  inspectionData: tableData[];
+  dataSource: MatTableDataSource<tableData>;
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+  @ViewChild(MatSort)
+  sort!: MatSort;
 
-  displayedColumns = [
+  displayedColumns: string[] = [
     'inspectorName',
     'dateTime',
     'home',
@@ -44,38 +49,29 @@ export class InspectionsComponent {
 
   constructor(private inspectionService: InspectionsService) {
     this.inspectionData = [];
-    this.dataSource = [];
+
+    this.inspectionService.getInspectionTableData().subscribe((data) => {
+      data.forEach((element) => {
+        element.dateTime = new Date(element.dateTime).toLocaleString();
+        element.zipCode = element.zipCode.slice(0, 5);
+      });
+      this.inspectionData = data;
+    });
+
+    this.dataSource = new MatTableDataSource<tableData>(this.inspectionData);
   }
 
-  ngOnInit() {
-    this.inspectionService.getInspections().subscribe((data) => {
-      this.inspectionData = data as Inspection[];
-    });
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
-    // Transform inspectionData and assign it to dataSource
-    this.dataSource = this.inspectionData.map((inspection) => {
-      return {
-        // Todo: grab the inspector name from the database using inspector id
-        inspectorName: `Inspector ${inspection.inspectorId}`,
-        dateTime: new Date(inspection.dateTime).toLocaleDateString(),
-        home: '123 Main St', // ToDo: grab the home address from the database using home id
-        zipCode: '12345',
-        inspection: `Inspection ${inspection.id}`,
-        // hack to get the list to display correctly based on if a checklist
-        // for that type exists or not. e.x. "Fire, Structural, Electrical"
-        inspectionType:
-          inspection.fireChecklist === null &&
-          inspection.structuralChecklist === null &&
-          inspection.plumbingChecklist === null &&
-          inspection.electricalChecklist === null
-            ? ''
-            : `
-              ${inspection.fireChecklist ? 'Fire, ' : ''}
-              ${inspection.structuralChecklist ? 'Structural, ' : ''}
-              ${inspection.plumbingChecklist ? 'Plumbing, ' : ''}
-              ${inspection.electricalChecklist ? 'Electrical' : ''}
-              `,
-      };
-    });
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
