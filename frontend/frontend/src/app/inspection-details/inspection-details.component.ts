@@ -36,7 +36,7 @@ export class InspectionDetailsComponent {
           this.inspection.dateTime
         ).toLocaleString();
       });
-    if (this.inspection.fireChecklist !== undefined) {
+    if (this.inspection.fireChecklist) {
       this.fireExists = true;
     }
     if (this.inspection.structuralChecklist) {

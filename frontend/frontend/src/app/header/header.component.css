@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .menu-button {
@@ -21,20 +20,5 @@
   a {
     color: inherit;
     text-decoration: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-  }
-
-  .nav {
-    margin-top: 20px;
-    justify-content: center;
-  }
-
-  .nav-item {
-    margin: 0 10px;
   }
 }
