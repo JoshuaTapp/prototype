@@ -1,0 +1,21 @@
+<h1>Home {{ home.id }}</h1>
+
+<h2>Details</h2>
+<ul>
+  <li>{{ home.addressField1 }}</li>
+  <li>{{ home.addressField2 }}</li>
+  <li>{{ home.city }}</li>
+  <li>{{ home.state }}</li>
+  <li>{{ home.zip }}</li>
+</ul>
+
+<h2>Inspections</h2>
+<ul>
+  @for (inspection of home.inspections; track inspection.id) {
+  <li>
+    <a style="cursor: pointer" (click)="goToInspection(inspection.id)">{{
+      inspection.id
+    }}</a>
+  </li>
+  }
+</ul>

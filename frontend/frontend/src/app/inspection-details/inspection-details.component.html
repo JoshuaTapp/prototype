@@ -1,0 +1,58 @@
+<h1>Inspection {{ inspection.id }}</h1>
+
+<h2>{{ inspection.dateTime }}</h2>
+@if(fireExists) {
+<h3>Fire</h3>
+@for (fireItems of inspection.fireChecklist; track fireItems.item) {
+<ul>
+  <li>{{ fireItems.item }}</li>
+  <li>{{ fireItems.status }}</li>
+  <li>{{ fireItems.explanation }}</li>
+  @if (fireItems.picturesUrls) {
+  <li>{{ fireItems.picturesUrls }}</li>
+  } @if (fireItems.videosUrls) {
+  <li>{{ fireItems.videosUrls }}</li>
+  }
+</ul>
+} } @if(structuralExists) {
+<h3>Structural</h3>
+@for (structuralItems of inspection.structuralChecklist; track
+structuralItems.item) {
+<ul>
+  <li>{{ structuralItems.item }}</li>
+  <li>{{ structuralItems.status }}</li>
+  <li>{{ structuralItems.explanation }}</li>
+  @if(structuralItems.picturesUrls) {
+  <li>{{ structuralItems.picturesUrls }}</li>
+  } @if(structuralItems.videosUrls) {
+  <li>{{ structuralItems.videosUrls }}</li>
+  }
+</ul>
+} } @if(plumbingExists) {
+<h3>Plumbing</h3>
+@for (plumbingItems of inspection.plumbingChecklist; track plumbingItems.item) {
+<ul>
+  <li>{{ plumbingItems.item }}</li>
+  <li>{{ plumbingItems.status }}</li>
+  <li>{{ plumbingItems.explanation }}</li>
+  @if(plumbingItems.picturesUrls) {
+  <li>{{ plumbingItems.picturesUrls }}</li>
+  } @if(plumbingItems.videosUrls) {
+  <li>{{ plumbingItems.videosUrls }}</li>
+  }
+</ul>
+} } @if(electricalExists) {
+<h3>Electrical</h3>
+@for (electricalItems of inspection.electricalChecklist; track
+electricalItems.item) {
+<ul>
+  <li>{{ electricalItems.item }}</li>
+  <li>{{ electricalItems.status }}</li>
+  <li>{{ electricalItems.explanation }}</li>
+  @if(electricalItems.picturesUrls) {
+  <li>{{ electricalItems.picturesUrls }}</li>
+  } @if(electricalItems.videosUrls) {
+  <li>{{ electricalItems.videosUrls }}</li>
+  }
+</ul>
+} }

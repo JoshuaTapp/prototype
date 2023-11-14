@@ -2,14 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
-interface Inspection {
-  inspectorId: number;
-  fireChecklist: [] | null;
-  structuralChecklist: [] | null;
-  plumbingChecklist: [] | null;
-  electricalChecklist: [] | null;
+export interface Inspection {
   id: number;
   dateTime: string;
+  fireChecklist: InspectionChecklist[];
+  structuralChecklist: InspectionChecklist[];
+  plumbingChecklist: InspectionChecklist[];
+  electricalChecklist: InspectionChecklist[];
+}
+
+export interface InspectionChecklist {
+  item: string;
+  status: string;
+  explanation: string;
+  picturesUrls: string[];
+  videosUrls: string[];
 }
 
 interface tableData {

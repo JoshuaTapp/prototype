@@ -1,4 +1,4 @@
-<div>
+<div class="inspectionTable">
   <mat-table #table [dataSource]="dataSource" matSort class="mat-elavation-z8">
     <!-- Define the columns -->
     <ng-container matColumnDef="inspectorName">
@@ -15,7 +15,15 @@
 
     <ng-container matColumnDef="home">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Home</th>
-      <td mat-cell *matCellDef="let inspection">{{ inspection.home }}</td>
+      <td mat-cell *matCellDef="let inspection">
+        <span style="cursor: pointer" (click)="goToHome(inspection.home)">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="home icon"
+            fontIcon="home"
+          ></mat-icon>
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="zipCode">
@@ -25,11 +33,37 @@
 
     <ng-container matColumnDef="inspection">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Inspection</th>
-      <td mat-cell *matCellDef="let inspection">{{ inspection.inspection }}</td>
+      <td mat-cell *matCellDef="let inspection">
+        <span
+          style="cursor: pointer"
+          (click)="goToInspection(inspection.inspection)"
+        >
+          <mat-icon
+            aria-hidden="false"
+            aria-label="inspection icon"
+            fontIcon="construction"
+          ></mat-icon>
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="inspectionType">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Inspection Type</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Inspection Type
+        <div class="inspectionTypeFilter">
+          <mat-form-field (click)="$event.stopPropagation()">
+            <mat-select
+              [(value)]="selectedInspectionType"
+              multiple
+              (selectionChange)="filterData()"
+            >
+              @for (types of inspectionTypes; track types) {
+              <mat-option [value]="types">{{ types }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let inspection">
         {{ inspection.inspectionType }}
       </td>
